@@ -329,11 +329,12 @@ namespace F03
 
                     DataRow drCP = dtCP.Rows[info.RowHandle];
                     txeID.Text = drCP["ID"].ToString();
-                    txeCode.Text = drCP["Department Code"].ToString();
-                    txeName.Text = drCP["Department Name"].ToString();
-                    glueDPType.EditValue = drCP["Department Type ID"].ToString();
                     glueCompany.EditValue = drCP["Company ID"].ToString();
                     glueBranch.EditValue = drCP["Branch ID"].ToString();
+                    glueDPType.EditValue = drCP["Department Type ID"].ToString();
+                    txeCode.Text = drCP["Department Code"].ToString();
+                    txeName.Text = drCP["Department Name"].ToString();
+
                     rgStatus.EditValue = Convert.ToInt32(drCP["Status ID"].ToString());
 
                     txeCREATE.Text = drCP["CreatedBy"].ToString();
