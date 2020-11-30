@@ -46,7 +46,7 @@ namespace F03
             NewData();
         }
 
-        private void LoadData()
+        private void LoadDEPT()
         {
             StringBuilder sbSQL = new StringBuilder();
             sbSQL.Append("SELECT DP.OIDDEPT AS ID, DP.Code AS [Department Code], DP.Name AS [Department Name], DP.DepartmentType AS [Department Type ID], DT.Name AS [Department Type], DP.OIDCOMPANY AS [Company ID], CP.Code AS [Company Code], ");
@@ -55,12 +55,31 @@ namespace F03
             sbSQL.Append("       Company AS CP ON DP.OIDCOMPANY = CP.OIDCOMPANY LEFT OUTER JOIN ");
             sbSQL.Append("       " + this.dbBranch + " AS BN ON DP.OIDBRANCH = BN.OIDBranch LEFT OUTER JOIN ");
             sbSQL.Append("       DepartmentType AS DT ON DP.DepartmentType = DT.Code ");
+            sbSQL.Append("WHERE (DP.Code <> N'') ");
+            if (glueCompany.Text.Trim() != "")
+            {
+                sbSQL.Append("AND (DP.OIDCOMPANY = '" + glueCompany.EditValue.ToString() + "') ");
+            }
+            if (glueBranch.Text.Trim() != "")
+            {
+                sbSQL.Append("AND (DP.OIDBRANCH = '" + glueBranch.EditValue.ToString() + "') ");
+            }
+            if (glueDPType.Text.Trim() != "")
+            {
+                sbSQL.Append("AND (DP.DepartmentType = '" + glueDPType.EditValue.ToString() + "') ");
+            }
             sbSQL.Append("ORDER BY[Company ID], [Branch ID], ID ");
             new ObjDevEx.setGridControl(gcDP, gvDP, sbSQL).getData(false, false, false, true);
             gvDP.Columns[3].Visible = false; //Department Type ID
             gvDP.Columns[5].Visible = false; //Company ID
             gvDP.Columns[9].Visible = false; //Branch ID
             gvDP.Columns[12].Visible = false; //Status ID
+
+        }
+
+        private void LoadData()
+        {
+            StringBuilder sbSQL = new StringBuilder();
 
             sbSQL.Clear();
             sbSQL.Append("SELECT Code AS [Company Code], EngName AS [Company Name (En)], THName AS [Company Name (Th)], OIDCOMPANY AS ID ");
@@ -73,6 +92,8 @@ namespace F03
             sbSQL.Append("FROM DepartmentType ");
             sbSQL.Append("ORDER BY ID ");
             new ObjDevEx.setGridLookUpEdit(glueDPType, sbSQL, "Department Type", "ID").getData();
+
+            LoadDEPT();
         }
 
         private void NewData()
@@ -369,6 +390,8 @@ namespace F03
                 }
                 
             }
+
+            LoadDEPT();
         }
 
         private void glueBranch_EditValueChanged(object sender, EventArgs e)
@@ -381,6 +404,7 @@ namespace F03
                     glueDPType.Focus();
                 }
             }
+            LoadDEPT();
         }
 
 
@@ -394,6 +418,7 @@ namespace F03
                     txeCode.Focus();
                 }
             }
+            LoadDEPT();
         }
 
 
